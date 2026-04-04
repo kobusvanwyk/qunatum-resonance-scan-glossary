@@ -362,7 +362,73 @@
     .logo-text { display: none; }
   }
 
-  /* ── PRINT STYLES ── */
+    /* Table of contents — hidden on screen, shown in print */
+    #printToc {
+      display: none;
+    }
+
+    @media print {
+      #printToc {
+        display: block;
+        page-break-after: always;
+        break-after: page;
+        padding: 0;
+      }
+
+      .toc-heading {
+        font-family: 'DM Serif Display', Georgia, serif;
+        font-size: 22pt;
+        font-weight: normal;
+        color: #1f2328;
+        margin-bottom: 14pt;
+        padding-bottom: 6pt;
+        border-bottom: 1.5pt solid #0550ae;
+      }
+
+      #tocList {
+        list-style: none;
+        columns: 2;
+        column-gap: 24pt;
+        padding: 0; margin: 0;
+      }
+
+      #tocList li {
+        display: flex;
+        align-items: baseline;
+        gap: 0;
+        padding: 3.5pt 0;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .toc-icon {
+        font-size: 9pt;
+        flex-shrink: 0;
+        margin-right: 5pt;
+        line-height: 1;
+      }
+
+      .toc-name {
+        font-size: 10pt;
+        color: #1f2328;
+        flex-shrink: 0;
+        max-width: 55%;
+      }
+
+      .toc-dots {
+        flex: 1;
+        border-bottom: 0.75pt dotted #adbac7;
+        margin: 0 5pt 2.5pt;
+        min-width: 10pt;
+      }
+
+      .toc-page {
+        font-size: 10pt;
+        color: #1f2328;
+        flex-shrink: 0;
+        font-variant-numeric: tabular-nums;
+      }
+    }
   @media print {
     /* Page setup — margin leaves room for footer */
     @page {
@@ -777,6 +843,12 @@
 
   <main class="main">
     <div id="searchBanner"></div>
+
+    <!-- Print-only table of contents — populated by JS before printing -->
+    <div id="printToc">
+      <h2 class="toc-heading">Contents</h2>
+      <ul id="tocList"></ul>
+    </div>
 
     <section class="section-block" id="cardiovascular-and-cerebrovascular" data-name="cardiovascular and cerebrovascular">
       <div class="section-header">
@@ -4627,6 +4699,71 @@ document.querySelectorAll('.section-block').forEach(sec => {
   if (first) first.classList.add('open');
 });
 updateActive();
+// ── Print TOC — estimate page numbers before printing ──
+function buildPrintToc() {
+  const tocList = document.getElementById('tocList');
+  if (!tocList) return;
+
+  const sectionEls = Array.from(document.querySelectorAll('.section-block'));
+  const allCards   = document.querySelectorAll('.param-card');
+
+  // 1. Remember which cards were open, then open them all so heights
+  //    reflect the fully-expanded print layout.
+  const wasOpen = new Set();
+  allCards.forEach(c => { if (c.classList.contains('open')) wasOpen.add(c); });
+  allCards.forEach(c => c.classList.add('open'));
+
+  // Force a synchronous reflow so offsetHeight is up to date.
+  document.body.offsetHeight;
+
+  // 2. Estimate print page content height.
+  //    A4 = 297 mm, top margin 18 mm, bottom 22 mm → 257 mm of content.
+  //    CSS px at 96 dpi: 1 mm ≈ 3.7795 px → 257 mm ≈ 971 px.
+  const PRINT_PAGE_H = 971;
+
+  //    Print content width: A4 210 mm − 30 mm margins = 180 mm ≈ 681 px.
+  //    Screen main area is wider than the sidebar-less print layout,
+  //    so content is shorter on screen than in print → conservative scale.
+  const PRINT_W  = 681;
+  const mainEl   = document.querySelector('.main');
+  const screenW  = mainEl ? mainEl.offsetWidth : (window.innerWidth - 280 - 88);
+  // wider print column → fewer lines → shorter content; narrower → more lines → taller.
+  // Scale measured screen heights to estimated print heights.
+  const scale = screenW > 0 ? (screenW / PRINT_W) : 1;
+
+  // 3. Build TOC entries — TOC itself is page 1, sections start at page 2.
+  let page = 2;
+  tocList.innerHTML = '';
+
+  sectionEls.forEach(sec => {
+    const titleEl = sec.querySelector('.s-title');
+    const badgeEl = sec.querySelector('.s-badge');
+    const title   = titleEl ? titleEl.textContent.trim() : sec.id;
+    const icon    = badgeEl ? badgeEl.textContent.trim() : '';
+
+    // Estimate how many print pages this section occupies.
+    const printH    = sec.offsetHeight * scale;
+    const pagesUsed = Math.max(1, Math.ceil(printH / PRINT_PAGE_H));
+
+    const li = document.createElement('li');
+    li.innerHTML =
+      `<span class="toc-icon">${icon}</span>` +
+      `<span class="toc-name">${title}</span>` +
+      `<span class="toc-dots"></span>` +
+      `<span class="toc-page">${page}</span>`;
+    tocList.appendChild(li);
+
+    page += pagesUsed;
+  });
+
+  // 4. Restore original open/closed state.
+  allCards.forEach(c => {
+    if (!wasOpen.has(c)) c.classList.remove('open');
+  });
+}
+
+window.addEventListener('beforeprint', buildPrintToc);
+
 // ── Theme toggle ──
 const root = document.documentElement;
 const themeBtn = document.getElementById('themeToggle');
