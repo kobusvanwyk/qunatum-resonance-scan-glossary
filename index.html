@@ -17,10 +17,54 @@
     --text: #e6edf3;
     --text-muted: #8b949e;
     --text-dim: #484f58;
+    --topbar-bg: rgba(13,17,23,0.95);
     --sidebar-w: 280px;
     --topbar-h: 64px;
     --radius: 10px;
+    --transition-theme: background .25s, color .25s, border-color .25s, box-shadow .25s;
   }
+
+  :root.light {
+    --bg: #f6f8fa;
+    --surface: #ffffff;
+    --surface-2: #eaeef2;
+    --border: #d0d7de;
+    --accent: #0969da;
+    --accent-warm: #bc4c00;
+    --accent-green: #1a7f37;
+    --text: #1f2328;
+    --text-muted: #57606a;
+    --text-dim: #adbac7;
+    --topbar-bg: rgba(246,248,250,0.95);
+  }
+
+  /* Theme toggle button */
+  #themeToggle {
+    flex-shrink: 0;
+    width: 36px; height: 36px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+    transition: var(--transition-theme), transform .15s;
+    position: relative; overflow: hidden;
+  }
+  #themeToggle:hover {
+    color: var(--text);
+    border-color: var(--accent);
+    transform: scale(1.05);
+  }
+  #themeToggle .icon-sun,
+  #themeToggle .icon-moon {
+    position: absolute;
+    transition: opacity .25s, transform .3s;
+  }
+  #themeToggle .icon-sun  { opacity: 0; transform: rotate(90deg) scale(.8); }
+  #themeToggle .icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
+  :root.light #themeToggle .icon-sun  { opacity: 1; transform: rotate(0deg) scale(1); }
+  :root.light #themeToggle .icon-moon { opacity: 0; transform: rotate(-90deg) scale(.8); }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
@@ -34,7 +78,7 @@
   .topbar {
     position: fixed; top: 0; left: 0; right: 0;
     height: var(--topbar-h);
-    background: rgba(13,17,23,0.95);
+    background: var(--topbar-bg);
     backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--border);
     display: flex; align-items: center;
@@ -340,6 +384,18 @@
       </svg>
     </button>
   </div>
+  <button id="themeToggle" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">
+    <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+    <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+  </button>
 </header>
 
 <div class="layout">
@@ -4625,6 +4681,17 @@ document.querySelectorAll('.section-block').forEach(sec => {
   if (first) first.classList.add('open');
 });
 updateActive();
+// ── Theme toggle ──
+const root = document.documentElement;
+const themeBtn = document.getElementById('themeToggle');
+
+// Restore saved preference
+if (localStorage.getItem('theme') === 'light') root.classList.add('light');
+
+themeBtn.addEventListener('click', () => {
+  const isLight = root.classList.toggle('light');
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+});
 </script>
 </body>
 </html>
