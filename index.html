@@ -330,13 +330,33 @@
 
   /* NO RESULTS */
   #noResults {
-    display: none; text-align: center;
-    padding: 80px 20px; color: var(--text-muted);
+    display: none;
+    text-align: center;
+    padding: 64px 20px;
+    color: var(--text-muted);
   }
-  #noResults .nr-icon { font-size: 48px; margin-bottom: 16px; }
+  #noResults .nr-icon {
+    font-size: 44px;
+    margin-bottom: 14px;
+    opacity: 0.6;
+  }
   #noResults h3 {
     font-family: 'DM Serif Display', serif;
     font-size: 22px; color: var(--text); margin-bottom: 8px;
+  }
+  #noResults p {
+    font-size: 14px; color: var(--text-muted); margin-bottom: 4px;
+  }
+  #noResults .nr-term {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 13px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 10px;
+    color: var(--text-dim);
+    font-style: italic;
   }
 
   /* BACK TO TOP */
@@ -4481,8 +4501,10 @@
 
     <div id="noResults">
       <div class="nr-icon">🔍</div>
-      <h3>No results found</h3>
-      <p>Try different keywords or check your spelling</p>
+      <h3>No Search Results Found</h3>
+      <p>No parameters or sections match your search.</p>
+      <p>Try a different word or check your spelling.</p>
+      <span class="nr-term" id="noResultsTerm"></span>
     </div>
   </main>
 </div>
@@ -4633,13 +4655,15 @@ function doSearch() {
     if (secHit) sectMatches++;
   });
 
-  if (totalMatches > 0) {
+  if (totalMatches > 0 || sectMatches > 0) {
     searchBanner.style.display = 'block';
     searchBanner.innerHTML = `Found <strong>${totalMatches}</strong> parameter${totalMatches!==1?'s':''} across <strong>${sectMatches}</strong> section${sectMatches!==1?'s':''} matching "<strong>${he(raw.trim())}</strong>"`;
     noResults.style.display = 'none';
+    document.getElementById('noResultsTerm').textContent = '';
   } else {
     searchBanner.style.display = 'none';
     noResults.style.display = 'block';
+    document.getElementById('noResultsTerm').textContent = `"${raw.trim()}"`;
   }
 }
 
