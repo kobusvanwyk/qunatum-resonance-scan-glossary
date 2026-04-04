@@ -1,0 +1,41 @@
+{
+  "name": "quantum-resonance-scan-glossary",
+  "version": "1.0.0",
+  "description": "Quantum Resonance Scan Glossary — plain-English health parameter reference",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder build --win --publish never"
+  },
+  "build": {
+    "appId": "com.quantumresonance.glossary",
+    "productName": "QRS Glossary",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron/**/*",
+      "index.html"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "electron/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "QRS Glossary"
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  }
+}
