@@ -15,7 +15,8 @@
     },
     "files": [
       "electron/**/*",
-      "index.html"
+      "index.html",
+      "quantum-logo.svg"
     ],
     "win": {
       "target": [

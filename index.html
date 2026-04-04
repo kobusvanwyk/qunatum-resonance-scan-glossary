@@ -6300,17 +6300,18 @@
 
 
     // ── Zoom ──
+    // Uses CSS `zoom` property on <html> so ALL elements scale — including
+    // those with hardcoded px values. Fully supported in Chromium / Electron.
     const ZOOM_STEPS = [70, 80, 90, 100, 110, 125, 150, 175, 200];
     let zoomIdx = ZOOM_STEPS.indexOf(100);
 
-    const zoomInBtn  = document.getElementById('zoomIn');
-    const zoomOutBtn = document.getElementById('zoomOut');
+    const zoomInBtn   = document.getElementById('zoomIn');
+    const zoomOutBtn  = document.getElementById('zoomOut');
     const zoomLevelEl = document.getElementById('zoomLevel');
-    const mainEl     = document.querySelector('.main');
 
     function applyZoom() {
         const pct = ZOOM_STEPS[zoomIdx];
-        mainEl.style.fontSize = pct + '%';
+        document.documentElement.style.zoom = (pct / 100);
         zoomLevelEl.textContent = pct + '%';
         zoomInBtn.disabled  = zoomIdx >= ZOOM_STEPS.length - 1;
         zoomOutBtn.disabled = zoomIdx <= 0;
@@ -6325,7 +6326,7 @@
         if (zoomIdx > 0) { zoomIdx--; applyZoom(); }
     });
 
-    // Keyboard shortcuts: Ctrl/Cmd + / -  and Ctrl+0 to reset
+    // Keyboard shortcuts: Ctrl/Cmd +/- to zoom, Ctrl+0 to reset
     document.addEventListener('keydown', e => {
         const mod = e.ctrlKey || e.metaKey;
         if (!mod) return;
@@ -6342,7 +6343,7 @@
         }
     });
 
-    // Restore saved zoom
+    // Restore saved zoom level
     const savedZoom = parseInt(localStorage.getItem('zoom') || '100', 10);
     const savedIdx = ZOOM_STEPS.indexOf(savedZoom);
     if (savedIdx !== -1) zoomIdx = savedIdx;
