@@ -4590,13 +4590,7 @@ function hl(text, q) {
 
 function fuzzy(str, q) {
   if (!q) return true;
-  if (str.includes(q)) return true;
-  let si=0, pi=0;
-  while (si < str.length && pi < q.length) {
-    if (str[si] === q[pi]) pi++;
-    si++;
-  }
-  return pi === q.length;
+  return str.includes(q);
 }
 
 searchInput.addEventListener('input', () => {
@@ -4756,7 +4750,7 @@ const root = document.documentElement;
 const themeBtn = document.getElementById('themeToggle');
 
 // Restore saved preference
-if (localStorage.getItem('theme') === 'light') root.classList.add('light');
+if (localStorage.getItem('theme') !== 'dark') root.classList.add('light');
 
 themeBtn.addEventListener('click', () => {
   const isLight = root.classList.toggle('light');
