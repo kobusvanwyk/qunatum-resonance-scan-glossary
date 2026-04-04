@@ -1,8 +1,11 @@
-const { app, BrowserWindow, shell, nativeImage } = require('electron')
+const { app, BrowserWindow, shell, nativeImage, Menu } = require('electron')
 const path = require('path')
 
 // Set app identity early — controls taskbar icon & grouping on Windows
 app.setAppUserModelId('com.quantumresonance.glossary')
+
+// Remove the native menu bar entirely (File, Edit, View, Window, Help)
+Menu.setApplicationMenu(null)
 
 const iconPath = path.join(__dirname, 'icon.ico')
 const appIcon  = nativeImage.createFromPath(iconPath)
