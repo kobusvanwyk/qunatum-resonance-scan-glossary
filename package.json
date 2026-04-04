@@ -32,7 +32,9 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "QRS Glossary"
+      "shortcutName": "QRS Glossary",
+      "installerSidebar": "electron/installer-sidebar.bmp",
+      "installerHeader": "electron/installer-header.bmp"
     }
   },
   "overrides": {
