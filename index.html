@@ -364,6 +364,23 @@
 
   /* ── PRINT STYLES ── */
   @media print {
+    /* Page setup — margin leaves room for footer */
+    @page {
+      margin: 18mm 15mm 22mm 15mm;
+      @bottom-left {
+        content: "Quantum Resonance Scan Glossary";
+        font-family: 'DM Sans', Arial, sans-serif;
+        font-size: 8.5pt;
+        color: #6e7781;
+      }
+      @bottom-right {
+        content: counter(page);
+        font-family: 'DM Sans', Arial, sans-serif;
+        font-size: 8.5pt;
+        color: #6e7781;
+      }
+    }
+
     /* Force light colours regardless of theme */
     :root, :root.light {
       --bg: #ffffff;
@@ -409,29 +426,6 @@
       margin-left: 0;
       padding: 0;
       max-width: 100%;
-    }
-
-    /* Cover page — title printed before all sections */
-    .main::before {
-      content: "Quantum Resonance Scan Glossary";
-      display: block;
-      font-family: 'DM Serif Display', Georgia, serif;
-      font-size: 32pt;
-      font-weight: normal;
-      color: #1f2328;
-      text-align: center;
-      padding: 40mm 0 8mm;
-    }
-    .main::after {
-      content: "A plain-English guide to all scanned health parameters";
-      display: block;
-      font-family: 'DM Sans', Arial, sans-serif;
-      font-size: 13pt;
-      color: #57606a;
-      text-align: center;
-      padding-bottom: 40mm;
-      border-bottom: 2pt solid #d0d7de;
-      margin-bottom: 0;
     }
 
     /* Each section starts on a new page */
