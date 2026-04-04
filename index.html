@@ -848,6 +848,75 @@
                 color: inherit !important;
             }
         }
+
+        /* ZOOM CONTROLS */
+        .zoom-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .zoom-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            color: var(--text-dim);
+            user-select: none;
+        }
+
+        .zoom-btn {
+            width: 30px;
+            height: 30px;
+            background: var(--surface-2);
+            border: 1.5px solid var(--border);
+            border-radius: 999px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1;
+            transition: all .15s;
+            user-select: none;
+        }
+
+        .zoom-btn:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+            background: rgba(242, 76, 90, .08);
+        }
+
+        .zoom-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .zoom-btn:disabled:hover {
+            color: var(--text-muted);
+            border-color: var(--border);
+            background: var(--surface-2);
+        }
+
+        .zoom-level {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            min-width: 36px;
+            text-align: center;
+            user-select: none;
+        }
+
+        @media print {
+            .zoom-group { display: none !important; }
+        }
+
+        @media (max-width: 768px) {
+            .zoom-group { display: none; }
+        }
     </style>
 </head>
 <body>
@@ -871,7 +940,22 @@
             </svg>
         </button>
     </div>
-    <button id="themeToggle" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">
+    <div class="zoom-group">
+        <span class="zoom-label">Zoom</span>
+        <button class="zoom-btn" id="zoomOut" aria-label="Zoom out" title="Zoom out (-)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+        </button>
+        <span class="zoom-level" id="zoomLevel">100%</span>
+        <button class="zoom-btn" id="zoomIn" aria-label="Zoom in" title="Zoom in (+)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+        </button>
+    </div>
+        <button id="themeToggle" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">
         <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
@@ -6213,6 +6297,56 @@
     }
 
     window.addEventListener('beforeprint', buildPrintToc);
+
+
+    // ── Zoom ──
+    const ZOOM_STEPS = [70, 80, 90, 100, 110, 125, 150, 175, 200];
+    let zoomIdx = ZOOM_STEPS.indexOf(100);
+
+    const zoomInBtn  = document.getElementById('zoomIn');
+    const zoomOutBtn = document.getElementById('zoomOut');
+    const zoomLevelEl = document.getElementById('zoomLevel');
+    const mainEl     = document.querySelector('.main');
+
+    function applyZoom() {
+        const pct = ZOOM_STEPS[zoomIdx];
+        mainEl.style.fontSize = pct + '%';
+        zoomLevelEl.textContent = pct + '%';
+        zoomInBtn.disabled  = zoomIdx >= ZOOM_STEPS.length - 1;
+        zoomOutBtn.disabled = zoomIdx <= 0;
+        localStorage.setItem('zoom', pct);
+    }
+
+    zoomInBtn.addEventListener('click', () => {
+        if (zoomIdx < ZOOM_STEPS.length - 1) { zoomIdx++; applyZoom(); }
+    });
+
+    zoomOutBtn.addEventListener('click', () => {
+        if (zoomIdx > 0) { zoomIdx--; applyZoom(); }
+    });
+
+    // Keyboard shortcuts: Ctrl/Cmd + / -  and Ctrl+0 to reset
+    document.addEventListener('keydown', e => {
+        const mod = e.ctrlKey || e.metaKey;
+        if (!mod) return;
+        if (e.key === '=' || e.key === '+') {
+            e.preventDefault();
+            if (zoomIdx < ZOOM_STEPS.length - 1) { zoomIdx++; applyZoom(); }
+        } else if (e.key === '-') {
+            e.preventDefault();
+            if (zoomIdx > 0) { zoomIdx--; applyZoom(); }
+        } else if (e.key === '0') {
+            e.preventDefault();
+            zoomIdx = ZOOM_STEPS.indexOf(100);
+            applyZoom();
+        }
+    });
+
+    // Restore saved zoom
+    const savedZoom = parseInt(localStorage.getItem('zoom') || '100', 10);
+    const savedIdx = ZOOM_STEPS.indexOf(savedZoom);
+    if (savedIdx !== -1) zoomIdx = savedIdx;
+    applyZoom();
 
     // ── Theme toggle ──
     const root = document.documentElement;
