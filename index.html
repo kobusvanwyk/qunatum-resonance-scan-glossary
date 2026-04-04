@@ -7,35 +7,41 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0d1117;
-            --surface: #161b22;
-            --surface-2: #21262d;
-            --border: #30363d;
-            --accent: #58a6ff;
-            --accent-warm: #f0883e;
-            --accent-green: #3fb950;
-            --text: #e6edf3;
-            --text-muted: #8b949e;
-            --text-dim: #484f58;
-            --topbar-bg: rgba(13, 17, 23, 0.95);
+            /* Dark mode palette */
+            --bg: #1a1212;
+            --surface: #251818;
+            --surface-2: #2e1f1f;
+            --border: #3d2929;
+            --accent: #F24C5A;
+            --accent-warm: #F39442;
+            --accent-pink: #FF7384;
+            --accent-blue: #2F80ED;
+            --accent-blue-dark: #1C5FCC;
+            --text: #F5F5F5;
+            --text-muted: #b0a0a0;
+            --text-dim: #6b5555;
+            --topbar-bg: rgba(26, 18, 18, 0.96);
             --sidebar-w: 280px;
             --topbar-h: 64px;
-            --radius: 10px;
+            --radius: 12px;
             --transition-theme: background .25s, color .25s, border-color .25s, box-shadow .25s;
         }
 
         :root.light {
-            --bg: #f6f8fa;
-            --surface: #ffffff;
-            --surface-2: #eaeef2;
-            --border: #d0d7de;
-            --accent: #0969da;
-            --accent-warm: #bc4c00;
-            --accent-green: #1a7f37;
-            --text: #1f2328;
-            --text-muted: #57606a;
-            --text-dim: #adbac7;
-            --topbar-bg: rgba(246, 248, 250, 0.95);
+            /* Light mode — brand default */
+            --bg: #F5F5F5;
+            --surface: #FFFFFF;
+            --surface-2: #EBEBEB;
+            --border: #E0E0E0;
+            --accent: #F24C5A;
+            --accent-warm: #F39442;
+            --accent-pink: #FF7384;
+            --accent-blue: #2F80ED;
+            --accent-blue-dark: #1C5FCC;
+            --text: #111111;
+            --text-muted: #555555;
+            --text-dim: #999999;
+            --topbar-bg: rgba(255, 255, 255, 0.96);
         }
 
         /* Theme toggle button */
@@ -44,8 +50,8 @@
             width: 36px;
             height: 36px;
             background: var(--surface-2);
-            border: 1px solid var(--border);
-            border-radius: 8px;
+            border: 1.5px solid var(--border);
+            border-radius: 999px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -57,8 +63,9 @@
         }
 
         #themeToggle:hover {
-            color: var(--text);
+            color: var(--accent);
             border-color: var(--accent);
+            background: rgba(242, 76, 90, .08);
             transform: scale(1.05);
         }
 
@@ -134,7 +141,6 @@
         .logo-icon {
             width: 36px;
             height: 36px;
-            background: linear-gradient(135deg, #58a6ff 0%, #bc8cff 100%);
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -175,8 +181,8 @@
             width: 100%;
             padding: 10px 44px 10px 40px;
             background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
+            border: 1.5px solid var(--border);
+            border-radius: 999px;
             color: var(--text);
             font-family: 'DM Sans', sans-serif;
             font-size: 14px;
@@ -186,7 +192,7 @@
 
         #searchInput:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(88, 166, 255, .15);
+            box-shadow: 0 0 0 3px rgba(242, 76, 90, .15);
         }
 
         #searchInput::placeholder {
@@ -292,6 +298,7 @@
 
         #sidebarSearch:focus {
             border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(242, 76, 90, .12);
         }
 
         #sidebarSearch::placeholder {
@@ -313,13 +320,13 @@
         }
 
         .nav-link:hover {
-            color: var(--text);
-            background: rgba(255, 255, 255, .04);
+            color: var(--accent);
+            background: rgba(242, 76, 90, .05);
         }
 
         .nav-link.active {
             color: var(--accent);
-            background: rgba(88, 166, 255, .08);
+            background: rgba(242, 76, 90, .08);
             border-left-color: var(--accent);
             font-weight: 500;
         }
@@ -347,7 +354,7 @@
         }
 
         .nav-link.active .nav-count {
-            background: rgba(88, 166, 255, .15);
+            background: rgba(242, 76, 90, .12);
             color: var(--accent);
         }
 
@@ -362,8 +369,8 @@
         /* SEARCH BANNER */
         #searchBanner {
             display: none;
-            background: rgba(88, 166, 255, .08);
-            border: 1px solid rgba(88, 166, 255, .2);
+            background: rgba(242, 76, 90, .07);
+            border: 1px solid rgba(242, 76, 90, .2);
             border-radius: var(--radius);
             padding: 11px 16px;
             margin-bottom: 24px;
@@ -387,15 +394,15 @@
             gap: 14px;
             margin-bottom: 20px;
             padding-bottom: 16px;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 2px solid var(--accent);
         }
 
         .s-badge {
             width: 44px;
             height: 44px;
-            background: var(--surface-2);
-            border: 1px solid var(--border);
-            border-radius: 10px;
+            background: rgba(243, 148, 66, .12);
+            border: 1.5px solid rgba(243, 148, 66, .3);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -433,7 +440,7 @@
         }
 
         .param-card:hover {
-            border-color: rgba(88, 166, 255, .3);
+            border-color: rgba(242, 76, 90, .4);
         }
 
         .param-card.hide {
@@ -560,8 +567,8 @@
             width: 40px;
             height: 40px;
             background: var(--surface-2);
-            border: 1px solid var(--border);
-            border-radius: 8px;
+            border: 1.5px solid var(--border);
+            border-radius: 999px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -581,6 +588,7 @@
         #backTop:hover {
             color: var(--accent);
             border-color: var(--accent);
+            background: rgba(242, 76, 90, .08);
         }
 
         /* RESPONSIVE */
@@ -620,10 +628,10 @@
                 font-family: 'DM Serif Display', Georgia, serif;
                 font-size: 22pt;
                 font-weight: normal;
-                color: #1f2328;
+                color: #111111;
                 margin-bottom: 14pt;
                 padding-bottom: 6pt;
-                border-bottom: 1.5pt solid #0550ae;
+                border-bottom: 2pt solid #F24C5A;
             }
 
             #tocList {
@@ -652,14 +660,14 @@
 
             .toc-name {
                 font-size: 10pt;
-                color: #1f2328;
+                color: #111111;
                 flex-shrink: 0;
                 max-width: 55%;
             }
 
             .toc-dots {
                 flex: 1;
-                border-bottom: 0.75pt dotted #adbac7;
+                border-bottom: 0.75pt dotted #cccccc;
                 margin: 0 5pt 2.5pt;
                 min-width: 10pt;
             }
@@ -668,7 +676,7 @@
                 flex-shrink: 0;
                 width: 22pt;
                 height: 13pt;
-                border: 0.75pt solid #1f2328;
+                border: 0.75pt solid #111111;
                 border-radius: 2pt;
                 display: inline-block;
             }
@@ -682,13 +690,13 @@
                     content: "Quantum Resonance Scan Glossary";
                     font-family: 'DM Sans', Arial, sans-serif;
                     font-size: 8.5pt;
-                    color: #6e7781;
+                    color: #999999;
                 }
                 @bottom-right {
                     content: counter(page);
                     font-family: 'DM Sans', Arial, sans-serif;
                     font-size: 8.5pt;
-                    color: #6e7781;
+                    color: #999999;
                 }
             }
 
@@ -698,11 +706,11 @@
                 --surface: #ffffff;
                 --surface-2: #f4f6f8;
                 --border: #d0d7de;
-                --accent: #0550ae;
-                --accent-warm: #953800;
-                --text: #1f2328;
-                --text-muted: #3d444d;
-                --text-dim: #6e7781;
+                --accent: #F24C5A;
+                --accent-warm: #F39442;
+                --text: #111111;
+                --text-muted: #333333;
+                --text-dim: #888888;
             }
 
             * {
@@ -723,7 +731,7 @@
 
             html, body {
                 background: #fff;
-                color: #1f2328;
+                color: #111111;
                 font-size: 11pt;
                 line-height: 1.6;
             }
@@ -751,7 +759,7 @@
                 display: flex;
                 align-items: center;
                 gap: 10pt;
-                border-bottom: 1.5pt solid #0550ae;
+                border-bottom: 2pt solid #F24C5A;
                 padding-bottom: 6pt;
                 margin-bottom: 14pt;
             }
@@ -759,8 +767,8 @@
             .s-badge {
                 width: 32pt;
                 height: 32pt;
-                background: #f4f6f8;
-                border: 1pt solid #d0d7de;
+                background: rgba(243,148,66,.1);
+                border: 1pt solid rgba(243,148,66,.3);
                 border-radius: 6pt;
                 display: flex;
                 align-items: center;
@@ -772,7 +780,7 @@
                 font-family: 'DM Serif Display', Georgia, serif;
                 font-size: 20pt;
                 font-weight: normal;
-                color: #1f2328;
+                color: #111111;
                 flex: 1;
             }
 
@@ -789,7 +797,7 @@
             .param-card {
                 background: transparent;
                 border: none;
-                border-bottom: 0.5pt solid #d0d7de;
+                border-bottom: 0.5pt solid #E0E0E0;
                 border-radius: 0;
                 padding: 8pt 0;
                 page-break-inside: avoid;
@@ -815,7 +823,7 @@
             .p-dot {
                 width: 5pt;
                 height: 5pt;
-                background: #0550ae;
+                background: #F39442;
                 margin-top: 2pt;
                 flex-shrink: 0;
             }
@@ -823,7 +831,7 @@
             .p-name {
                 font-size: 11pt;
                 font-weight: 600;
-                color: #1f2328;
+                color: #111111;
             }
 
             .p-desc {
@@ -846,7 +854,7 @@
 
 <header class="topbar">
     <a class="logo" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
-        <img src="/quantum-logo.svg" alt="QRS Glossay Logo" style="width: 100%;">
+        <img src="quantum-logo.svg" alt="QRS Glossay Logo" style="width: 100%;">
     </a>
     <div class="search-wrap">
     <span class="s-icon">
