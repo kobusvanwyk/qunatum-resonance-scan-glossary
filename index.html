@@ -361,6 +361,176 @@
     .main { margin-left: 0; padding: 20px 16px 60px; }
     .logo-text { display: none; }
   }
+
+  /* ── PRINT STYLES ── */
+  @media print {
+    /* Force light colours regardless of theme */
+    :root, :root.light {
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --surface-2: #f4f6f8;
+      --border: #d0d7de;
+      --accent: #0550ae;
+      --accent-warm: #953800;
+      --text: #1f2328;
+      --text-muted: #3d444d;
+      --text-dim: #6e7781;
+    }
+
+    * {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* Hide everything that isn't content */
+    .topbar,
+    .sidebar,
+    #backTop,
+    #themeToggle,
+    .p-chevron,
+    #searchBanner,
+    #noResults {
+      display: none !important;
+    }
+
+    html, body {
+      background: #fff;
+      color: #1f2328;
+      font-size: 11pt;
+      line-height: 1.6;
+    }
+
+    .layout {
+      display: block;
+      padding-top: 0;
+    }
+
+    .main {
+      margin-left: 0;
+      padding: 0;
+      max-width: 100%;
+    }
+
+    /* Cover page — title printed before all sections */
+    .main::before {
+      content: "Quantum Resonance Scan Glossary";
+      display: block;
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 32pt;
+      font-weight: normal;
+      color: #1f2328;
+      text-align: center;
+      padding: 40mm 0 8mm;
+    }
+    .main::after {
+      content: "A plain-English guide to all scanned health parameters";
+      display: block;
+      font-family: 'DM Sans', Arial, sans-serif;
+      font-size: 13pt;
+      color: #57606a;
+      text-align: center;
+      padding-bottom: 40mm;
+      border-bottom: 2pt solid #d0d7de;
+      margin-bottom: 0;
+    }
+
+    /* Each section starts on a new page */
+    .section-block {
+      page-break-before: always;
+      break-before: page;
+      padding: 8mm 0 4mm;
+    }
+
+    /* Section header */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10pt;
+      border-bottom: 1.5pt solid #0550ae;
+      padding-bottom: 6pt;
+      margin-bottom: 14pt;
+    }
+
+    .s-badge {
+      width: 32pt; height: 32pt;
+      background: #f4f6f8;
+      border: 1pt solid #d0d7de;
+      border-radius: 6pt;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16pt;
+    }
+
+    .s-title {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 20pt;
+      font-weight: normal;
+      color: #1f2328;
+      flex: 1;
+    }
+
+    .s-count {
+      font-size: 9pt;
+      color: #57606a;
+    }
+
+    /* Param cards — flat, fully expanded, no accordion */
+    .param-list {
+      gap: 0;
+    }
+
+    .param-card {
+      background: transparent;
+      border: none;
+      border-bottom: 0.5pt solid #d0d7de;
+      border-radius: 0;
+      padding: 8pt 0;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .param-card:last-child {
+      border-bottom: none;
+    }
+
+    /* Force all cards open */
+    .param-body {
+      max-height: none !important;
+      overflow: visible !important;
+    }
+
+    .param-head {
+      padding: 0 0 4pt 0;
+      cursor: default;
+      gap: 8pt;
+    }
+
+    .p-dot {
+      width: 5pt; height: 5pt;
+      background: #0550ae;
+      margin-top: 2pt;
+      flex-shrink: 0;
+    }
+
+    .p-name {
+      font-size: 11pt;
+      font-weight: 600;
+      color: #1f2328;
+    }
+
+    .p-desc {
+      font-size: 10pt;
+      line-height: 1.65;
+      color: #3d444d;
+      border-top: none;
+      padding: 0 0 0 13pt;
+    }
+
+    /* Don't print search highlights */
+    mark {
+      background: none !important;
+      color: inherit !important;
+    }
+  }
 </style>
 </head>
 <body>
